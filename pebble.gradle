@@ -1,0 +1,38 @@
+/*
+Should be specified in a root project before apply script
+ext.pebblePhoneIP="192.168.0.4"
+ext.pebbleTool="pebble"
+*/
+
+if (!rootProject.hasProperty("pebblePhoneIP")){
+    throw new GradleException("Please specify pebblePhoneIP")
+}
+
+if (!rootProject.hasProperty("pebbleTool")){
+    throw new GradleException("Please specify pebbleTool")
+}
+
+
+task build(group: "pebble", type:Exec){
+    executable = rootProject.pebbleTool
+    args = ["build"]
+}
+
+task install(group: "pebble", type:Exec){
+    executable = rootProject.pebbleTool
+    args = ["install","--phone", rootProject.pebblePhoneIP]
+}
+
+task logs(group: "pebble"){
+    doLast{
+        ProcessBuilder builder = new ProcessBuilder([rootProject.pebbleTool,
+                                                     "logs",
+                                                     "--phone",
+                                                     rootProject.pebblePhoneIP])
+        builder.redirectErrorStream(true)
+        builder.directory(project.rootDir)
+        builder.inheritIO()
+        Process process = builder.start()
+        process.waitFor()
+    }
+}

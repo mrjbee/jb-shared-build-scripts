@@ -36,3 +36,6 @@ task logs(group: "pebble"){
         process.waitFor()
     }
 }
+
+logs.mustRunAfter install
+install.mustRunAfter build

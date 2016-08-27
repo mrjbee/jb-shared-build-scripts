@@ -19,6 +19,7 @@ task build(group: "pebble", type:Exec){
 }
 
 task install(group: "pebble", type:Exec){
+    dependsOn "build"
     executable = rootProject.pebbleTool
     args = ["install","--phone", rootProject.pebblePhoneIP]
 }
@@ -38,4 +39,3 @@ task logs(group: "pebble"){
 }
 
 logs.mustRunAfter install
-install.mustRunAfter build
